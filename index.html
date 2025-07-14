@@ -9,10 +9,18 @@
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 50%, #fbcfe8 100%);
+            background: linear-gradient(-45deg, #fdf2f8, #fce7f3, #fbcfe8, #f9a8d4);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         .card {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -81,6 +89,7 @@
         </h1>
         <div class="heart text-4xl text-pink-500">❤️</div>
         <p class="text-gray-600 mt-4 text-sm">Başlangıç: 4 Kasım 2023</p>
+        
     </div>
 
     <script>
@@ -150,6 +159,61 @@
         // Create floating hearts
         createHearts();
         setInterval(createHearts, 3000); // Add new hearts every 3 seconds
+        
+        // Memories functionality
+        let memoryCounter = 0;
+        const memoryBtn = document.getElementById('addMemoryBtn');
+        const memoryCount = document.getElementById('memoryCount');
+        const memoryPhoto = document.getElementById('memoryPhoto');
+        
+        const memoryPhotos = [
+            'https://source.unsplash.com/random/300x300/?couple',
+            'https://source.unsplash.com/random/300x300/?love',
+            'https://source.unsplash.com/random/300x300/?romantic',
+            'https://source.unsplash.com/random/300x300/?kiss',
+            'https://source.unsplash.com/random/300x300/?hug'
+        ];
+        
+        memoryBtn.addEventListener('click', () => {
+            memoryCounter++;
+            memoryCount.textContent = memoryCounter;
+            
+            // Change photo with a nice effect
+            memoryPhoto.style.opacity = 0;
+            setTimeout(() => {
+                memoryPhoto.src = memoryPhotos[Math.floor(Math.random() * memoryPhotos.length)] + '&t=' + Date.now();
+                memoryPhoto.style.opacity = 1;
+            }, 300);
+            
+            // Create a burst of hearts
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '❤️';
+                    heart.style.position = 'absolute';
+                    heart.style.fontSize = `${Math.random() * 30 + 20}px`;
+                    heart.style.left = `${Math.random() * 100}%`;
+                    heart.style.top = '50%';
+                    heart.style.transform = 'translate(-50%, -50%)';
+                    heart.style.opacity = '0';
+                    heart.style.transition = 'all 1s ease-out';
+                    heart.style.zIndex = '100';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.style.opacity = '1';
+                        heart.style.top = `${Math.random() * 60}%`;
+                        heart.style.left = `${50 + (Math.random() - 0.5) * 30}%`;
+                    }, 10);
+                    
+                    setTimeout(() => {
+                        heart.style.opacity = '0';
+                        setTimeout(() => heart.remove(), 1000);
+                    }, 1000);
+                }, i * 100);
+            }
+        });
+        
     </script>
 </body>
 </html>
